@@ -1,0 +1,1291 @@
+{
+  "name": "[PROJECT] UltimateAssistant",
+  "nodes": [
+    {
+      "parameters": {
+        "name": "emailAgent",
+        "description": "Call this tool for any email actions.",
+        "workflowId": {
+          "__rl": true,
+          "value": "LlFWqU2CscS9KXeR",
+          "mode": "list",
+          "cachedResultName": "Gmail Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        720,
+        880
+      ],
+      "id": "28cc6fb6-928d-47a9-bd14-6bffa7335df6",
+      "name": "Email Agent"
+    },
+    {
+      "parameters": {
+        "name": "contactAgent",
+        "description": "Call this tool for any contact related actions.",
+        "workflowId": {
+          "__rl": true,
+          "value": "Ypxyw4lR9pNtxQbu",
+          "mode": "list",
+          "cachedResultName": "Contact"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        816,
+        880
+      ],
+      "id": "c721f730-80f8-4fb4-8bb2-d0832daff918",
+      "name": "Contact Agent"
+    },
+    {
+      "parameters": {
+        "name": "contentCreator",
+        "description": "Call this tool to create blog posts.",
+        "workflowId": {
+          "__rl": true,
+          "value": "8OMMEdeECSCRGWWh",
+          "mode": "list",
+          "cachedResultName": "Content"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        928,
+        880
+      ],
+      "id": "9272b79e-936c-4cc4-bb81-ddbb901af68a",
+      "name": "Content Creator Agent"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Use this tool to search the internet",
+        "method": "POST",
+        "url": "https://api.tavily.com/search",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n    \"api_key\": \"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\",\n    \"query\": \"{searchTerm}\",\n    \"search_depth\": \"basic\",\n    \"include_answer\": true,\n    \"topic\": \"news\",\n    \"include_raw_content\": true,\n    \"max_results\": 1\n} ",
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "searchTerm",
+              "description": "What the user has requested to search the internet for",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        400,
+        880
+      ],
+      "id": "46b28a07-594b-49f2-a0e5-6b89e49692a1",
+      "name": "Tavily"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        1488,
+        896
+      ],
+      "id": "bc5d660f-e6e0-42bd-b131-fb1de66dbc2d",
+      "name": "Calculator"
+    },
+    {
+      "parameters": {
+        "name": "calendarAgent",
+        "description": "Call this tool for any calendar action.",
+        "workflowId": {
+          "__rl": true,
+          "value": "31cmndFpcxePdK2S",
+          "mode": "list",
+          "cachedResultName": "Calendar"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        608,
+        880
+      ],
+      "id": "d516dae9-3eb8-4054-9789-b9f0beb9fcb4",
+      "name": "Calendar Agent"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Chat_ID', ``, 'string') }}",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegramTool",
+      "typeVersion": 1.2,
+      "position": [
+        1376,
+        896
+      ],
+      "id": "a7c72695-ea8e-4ce8-8231-9fe6a6210c7d",
+      "name": "Telegram",
+      "webhookId": "24d4040e-f8f8-44ab-998f-0a0258f38765",
+      "credentials": {
+        "telegramApi": {
+          "id": "XHzxSKjNlFgDjPwT",
+          "name": "VideoTestYT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "sonar",
+        "messages": {
+          "message": [
+            {
+              "content": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('message0_Text', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.perplexityTool",
+      "typeVersion": 1,
+      "position": [
+        496,
+        880
+      ],
+      "id": "d970db09-19ca-4c2c-9fdf-c59cf4247a3d",
+      "name": "Perplexity",
+      "credentials": {
+        "perplexityApi": {
+          "id": "ORqlt0QbtwmeAk7h",
+          "name": "Perplexity account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1YR5QZSfC6g1xs3dzo3o2m4TmTTklTBHm0t4age03CYU",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лист1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YR5QZSfC6g1xs3dzo3o2m4TmTTklTBHm0t4age03CYU/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.6,
+      "position": [
+        1040,
+        880
+      ],
+      "id": "c9a5df52-2db4-4402-8c50-9aab5dc62ca0",
+      "name": "SubsAgent",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Tj66ggjeOR20k9HQ",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Call this tool to transcribe a YouTube video.",
+        "workflowId": {
+          "__rl": true,
+          "value": "2FWc4XVsGFbV3GZp",
+          "mode": "list",
+          "cachedResultName": "Transcript"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        1280,
+        896
+      ],
+      "id": "de5db983-da3c-4db1-a4bf-fe81d1b7eb1e",
+      "name": "TranscriptionAgent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.text }}",
+        "options": {
+          "systemMessage": "=# Обзор\nТы — идеальный персональный ассистент. Твоя задача — направить запрос пользователя в нужный инструмент. Твоя работа не включает написание писем или даже создание сводок — ты просто вызываешь подходящий инструмент.\n\n## Инструменты\n- emailAgent: Используй этот инструмент для работы с электронной почтой\n- calendarAgent: Используй этот инструмент для работы с календарём\n- contactAgent: Используй этот инструмент, чтобы получить, обновить или добавить контакты\n- contentCreator: Используй этот инструмент для создания блог-постов\n- Tavily: Используй этот инструмент для поиска новостей в интернете\n- Telegram: Используй этот инструмент для отправки напоминаний телеграмм по требованию пользователя.\n- Perplexity: Используй этот инструмент для поиска актуальной информации в интернете\n- SubsAgent: Используй этот инструмент для получения ежемесячных платежей (подписок)\n- Carousel Agent: Используй этот инструмент для написания каруселей в инстаграмм. Перед отправкой заголовка обратись к инструменту Perplexity для получения информации.\n\nЭто изображение\n{{ $json.content }}\n\n## Правила\n- Некоторые действия требуют предварительного получения контактной информации. Для следующих действий ты обязан сначала получить контактные данные и передать их нужному агенту:\n  - отправка писем\n  - черновики писем\n  - создание события в календаре с участником\n\n## Примеры\n1)  \n- Ввод: отправь письмо Илье Генералову, спроси, во сколько он хочет выехать  \n  - Действие: Использовать contactAgent, чтобы получить email Ильи Генералова  \n  - Действие: Использовать emailAgent, чтобы отправить письмо. Ты передаёшь инструменту запрос вроде: \"отправь Илье Генералову письмо с вопросом, во сколько он хочет выехать. вот его email: [email адрес]\"  \n- Вывод: Письмо отправлено Илье Генералову. Могу ещё чем-то помочь?\n\n## Финальные напоминания\nТекущая дата/время: {{ $now }}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1072,
+        560
+      ],
+      "id": "1b293226-ae97-4732-8bfd-3bd9cbd4f44e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        880
+      ],
+      "id": "450d580b-3f02-4f41-b098-f68f15a99d35",
+      "name": "ChatGPT",
+      "credentials": {
+        "openAiApi": {
+          "id": "OP0XOhuuKtWcx1gR",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Получить сообщение').item.json.message.chat.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        304,
+        880
+      ],
+      "id": "8c20e2f0-049b-48fc-a939-13355b9ff319",
+      "name": "Память"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}"
+      },
+      "id": "4647c081-690a-4013-a3a2-6245c2cfe82f",
+      "name": "Скачать голосовое",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        528,
+        240
+      ],
+      "webhookId": "83bb7385-33f6-4105-8294-1a91c0ebbee5",
+      "credentials": {
+        "telegramApi": {
+          "id": "XHzxSKjNlFgDjPwT",
+          "name": "VideoTestYT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "id": "68793329-30a2-484f-aa75-0a3ee630beb2",
+      "name": "Голосовое в текст",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.6,
+      "position": [
+        704,
+        240
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "OP0XOhuuKtWcx1gR",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe7ecc99-e1e8-4a5e-bdd6-6fce9757b234",
+              "name": "text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e7d6b62b-5314-4ded-aee4-3f7bf4bb4685",
+      "name": "Преобразовать текст",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        624,
+        448
+      ]
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "6b211a2c-a983-4e6a-b831-68263bb368c3",
+      "name": "Получить сообщение",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -336,
+        208
+      ],
+      "webhookId": "99eab1a0-569d-4f0f-a49e-578a02abfe63",
+      "credentials": {
+        "telegramApi": {
+          "id": "XHzxSKjNlFgDjPwT",
+          "name": "VideoTestYT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Получить сообщение').item.json.message.chat.id }}",
+        "text": "={{ $('AI Agent').item.json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "abd62b84-c341-41cc-86ff-3f7bc2795aa5",
+      "name": "Ответить",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1744,
+        560
+      ],
+      "webhookId": "5dced4b9-5066-4036-a4d4-14fc07edd53c",
+      "credentials": {
+        "telegramApi": {
+          "id": "XHzxSKjNlFgDjPwT",
+          "name": "VideoTestYT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Use the tool to think about something. Use it when complex reasoning or some cache memory is needed."
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        896
+      ],
+      "id": "11df4f36-a403-4945-8394-bda35a0ba328",
+      "name": "Think"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2a1d904a-1f69-41ad-8e8b-4931512bf908",
+                    "leftValue": "={{ $json.message.document }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "object",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "File"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "031fc39f-e135-433f-862f-84b5b6ee190f",
+                    "leftValue": "={{ $json.message.photo }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "array",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Photo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.voice.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "614ebd73-b26c-4ea8-b1e0-5469a09d09da"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8c844924-b2ed-48b0-935c-c66a8fd0c778",
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ea276e81-3d93-4abd-8381-5c961080a921",
+      "name": "Распределение",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -48,
+        176
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        1552,
+        400
+      ],
+      "id": "c6085466-a6bc-4eb0-8410-cf92fd9512e4",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "chatId": "472850811",
+        "text": "=Вышла ошибочка :(\n\nЗагляни в воркфлоу",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1744,
+        400
+      ],
+      "id": "ce06d3fc-4f89-4222-8670-3e22d908661f",
+      "name": "Error",
+      "webhookId": "db36ae3a-1ab9-42cf-a2fa-eabbc8e9800f",
+      "credentials": {
+        "telegramApi": {
+          "id": "XHzxSKjNlFgDjPwT",
+          "name": "VideoTestYT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Call this tool to write text of carousel",
+        "workflowId": {
+          "__rl": true,
+          "value": "aFlF1TuYuFAF87im",
+          "mode": "list",
+          "cachedResultName": "Carousel"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        1152,
+        880
+      ],
+      "id": "86aa4b36-2e48-4178-8420-2ae9c9f68f6e",
+      "name": "Carousel Agent"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.document.file_id }}"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        -144
+      ],
+      "id": "2144e5a9-ed3a-4e17-990f-b5be2fcea98b",
+      "name": "Получить файл",
+      "webhookId": "0223661f-13a7-432b-9684-751904ed17ea",
+      "credentials": {
+        "telegramApi": {
+          "id": "XHzxSKjNlFgDjPwT",
+          "name": "VideoTestYT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.photo[$json.message.photo.length - 1].file_id }}"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        352,
+        48
+      ],
+      "id": "a16f8990-a7ce-4054-83ff-3ac5eea28643",
+      "name": "Получить изображение",
+      "webhookId": "849a5cfd-4507-44f0-85df-237d3ae62831",
+      "credentials": {
+        "telegramApi": {
+          "id": "XHzxSKjNlFgDjPwT",
+          "name": "VideoTestYT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        432,
+        -144
+      ],
+      "id": "52d49b9a-58df-4836-a38d-b9a03af88b13",
+      "name": "Загрузить в OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "OP0XOhuuKtWcx1gR",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "operation": "create",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "name": "File Extracter",
+        "description": "Отвечай на вопрос прикрепленный к PDF",
+        "instructions": "Ты файловый ассистент.",
+        "knowledgeRetrieval": true,
+        "file_ids": "={{ $json.id }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        608,
+        -144
+      ],
+      "id": "f41b1170-8bfe-45c4-b12a-dd25b8efc49d",
+      "name": "Принять файл",
+      "credentials": {
+        "openAiApi": {
+          "id": "OP0XOhuuKtWcx1gR",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "assistantId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "prompt": "define",
+        "text": "=Запрос пользователя:\n {{ $('Получить сообщение').item.json.message.caption }}\n\nExtract the data from the file",
+        "options": {
+          "maxRetries": 5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        784,
+        -144
+      ],
+      "id": "f4cd35dc-6624-4953-a903-a5d54e9e8a4e",
+      "name": "Обработать файл",
+      "credentials": {
+        "openAiApi": {
+          "id": "OP0XOhuuKtWcx1gR",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "03dd15b0-4f4d-4a61-8c2f-e6db45b1b594",
+              "name": "text",
+              "value": "=Вот текстовое описание файла, полученное от модели анализа файлов: {{ $json.output }} Проанализируй его и выполни следующий запрос: {{ $('Получить сообщение').item.json.message.caption }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1072,
+        -144
+      ],
+      "id": "031621b0-e527-41d9-baba-7f78065bf0b1",
+      "name": "Совместить"
+    },
+    {
+      "parameters": {
+        "operation": "information"
+      },
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        528,
+        48
+      ],
+      "id": "60366488-8c6a-4423-be22-b59aa7b752fd",
+      "name": "Загрузить изображение"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "text": "What's in this image? Answer in Russian",
+        "inputType": "base64",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        704,
+        48
+      ],
+      "id": "fce283d3-2db6-4f1d-9363-f7d266bc181d",
+      "name": "Проанализировать",
+      "credentials": {
+        "openAiApi": {
+          "id": "OP0XOhuuKtWcx1gR",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "03dd15b0-4f4d-4a61-8c2f-e6db45b1b594",
+              "name": "text",
+              "value": "=Вот текстовое описание изображения, полученное от модели анализа изображения: {{ $json.content }} Проанализируй его и выполни следующий запрос: {{ $('Получить сообщение').item.json.message.caption }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        48
+      ],
+      "id": "b534bfa0-cc9f-413e-b730-0f6f53aeb332",
+      "name": "Совместить1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot7724175143:AAHeHs_C2Xn0Z-UJADhFIU2ClFqOkVQiZP4/sendChatAction",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": {{ $json.message.from.id }},\n  \"action\": \"typing\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -96,
+        -32
+      ],
+      "id": "8e1d22c3-b42d-43b0-8548-d5fb4e47e4d6",
+      "name": "печатает..."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot7724175143:AAHeHs_C2Xn0Z-UJADhFIU2ClFqOkVQiZP4/sendChatAction",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": {{ $('Получить сообщение').item.json.message.from.id }},\n  \"action\": \"typing\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        368
+      ],
+      "id": "6465a14e-60fa-48a8-8f86-24fad9089333",
+      "name": "печатает1..."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot7724175143:AAHeHs_C2Xn0Z-UJADhFIU2ClFqOkVQiZP4/sendChatAction",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": {{ $('Получить сообщение').item.json.message.from.id }},\n  \"action\": \"typing\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1424,
+        560
+      ],
+      "id": "77b9cc0c-3e3a-4c3f-8793-97957b521cb6",
+      "name": "печатает...2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Email Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contact Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Creator Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tavily": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Perplexity": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SubsAgent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TranscriptionAgent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "печатает...2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ChatGPT": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Память": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Скачать голосовое": {
+      "main": [
+        [
+          {
+            "node": "Голосовое в текст",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Голосовое в текст": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "печатает1...",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Преобразовать текст": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "печатает1...",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Получить сообщение": {
+      "main": [
+        [
+          {
+            "node": "Распределение",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "печатает...",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Распределение": {
+      "main": [
+        [
+          {
+            "node": "Получить файл",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Получить изображение",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Скачать голосовое",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Преобразовать текст",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Carousel Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Получить файл": {
+      "main": [
+        [
+          {
+            "node": "Загрузить в OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Получить изображение": {
+      "main": [
+        [
+          {
+            "node": "Загрузить изображение",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Загрузить в OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Принять файл",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Принять файл": {
+      "main": [
+        [
+          {
+            "node": "Обработать файл",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Обработать файл": {
+      "main": [
+        [
+          {
+            "node": "Совместить",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Совместить": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "печатает1...",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Загрузить изображение": {
+      "main": [
+        [
+          {
+            "node": "Проанализировать",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Проанализировать": {
+      "main": [
+        [
+          {
+            "node": "Совместить1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Совместить1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "печатает1...",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "печатает...2": {
+      "main": [
+        [
+          {
+            "node": "Ответить",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b01304e5-040b-4cb7-b0d4-f838675f08eb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b8d75033dccbb840a52d8f5196e1eb3e8a584678eaec7c9905ceafbea961e069"
+  },
+  "id": "4VgtHzA7OXBO38ud",
+  "tags": []
+}

@@ -1,0 +1,262 @@
+{
+  "name": "[PROJECT] Content",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query}}",
+        "options": {
+          "systemMessage": "=# Обзор\nТы — опытный AI-копирайтер, специализирующийся на создании увлекательного, структурированного и информативного блога. Твой стиль — ясный, убедительный и адаптированный под целевую аудиторию. Ты оптимизируешь тексты для читаемости, SEO и ценности, обеспечивая глубокую проработку, оригинальность и отсутствие \"воды\".\n\n## Инструменты\nTavily — используй этот инструмент для поиска информации в интернете по заданной теме статьи.\n\nПоддерживай естественный, \"человеческий\" тон, используй разнообразные конструкции предложений и добавляй примеры или данные по необходимости. Структурируй текст для удобства восприятия — пиши лаконично и логично. Обязательно проверяй факты и придерживайся нужного стиля в зависимости от бренда или цели статьи.\n\nПиши на русском языке."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -352,
+        160
+      ],
+      "id": "5c68c7e2-53bf-4a07-85eb-606711cdcf68",
+      "name": "Content Creator Agent",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "14d9076e-27ea-4846-8b44-f83cf4022b9e",
+              "name": "response",
+              "value": "=Заполнил статью в Гугл табличку \nhttps://docs.google.com/spreadsheets/d/15W-UqxwKv8I-OEO4ZTZPElH0rXdxTqN1LX4YhaYdss8/",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        320,
+        64
+      ],
+      "id": "282e342a-8e6a-4ace-a42f-c795f6303449",
+      "name": "Response"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f2a8ff2d-6b59-4ad6-a2e7-8705354f4105",
+              "name": "response",
+              "value": "Error occurred. Please try again.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        320,
+        256
+      ],
+      "id": "3e029a1a-acfc-4467-b9bf-694b96ecec40",
+      "name": "Try Again"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -608,
+        160
+      ],
+      "id": "cbf0e8e5-c6a4-4405-851d-d5a4316583c8",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -432,
+        400
+      ],
+      "id": "135caeea-5f8c-47db-88a0-12cc498657f1",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "OP0XOhuuKtWcx1gR",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/15W-UqxwKv8I-OEO4ZTZPElH0rXdxTqN1LX4YhaYdss8/edit?usp=sharing",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лист1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15W-UqxwKv8I-OEO4ZTZPElH0rXdxTqN1LX4YhaYdss8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Статья": "={{ $json.output }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Статья",
+              "displayName": "Статья",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        48,
+        64
+      ],
+      "id": "733d4486-e4cf-477a-972f-67f6d7905afb",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Tj66ggjeOR20k9HQ",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Use this tool to search the internet",
+        "method": "POST",
+        "url": "https://api.tavily.com/search",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n    \"api_key\": \"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\",\n    \"query\": \"{searchTerm}\",\n    \"search_depth\": \"basic\",\n    \"include_answer\": true,\n    \"topic\": \"news\",\n    \"include_raw_content\": true,\n    \"max_results\": 1\n} ",
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "searchTerm",
+              "description": "What the user has requested to search the internet for",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        -128,
+        416
+      ],
+      "id": "86b3dbac-addf-4a0c-83bb-fbc8c1a81fc9",
+      "name": "Tavily"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Content Creator Agent": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Try Again",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Content Creator Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Content Creator Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tavily": {
+      "ai_tool": [
+        [
+          {
+            "node": "Content Creator Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "fc64954e-8787-4ef2-bed3-4d0970ea1ca5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b8d75033dccbb840a52d8f5196e1eb3e8a584678eaec7c9905ceafbea961e069"
+  },
+  "id": "Vld8DTiAqzmOBoie",
+  "tags": []
+}
