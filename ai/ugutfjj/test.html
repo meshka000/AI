@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>OWL‑ViT Zero‑shot Detection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { margin:0; background:#0e0f13; color:#e7e7ea; font:14px system-ui,sans-serif; }
+    .wrap { position:relative; width:min(95vw,960px); margin:12px auto; aspect-ratio:16/9; background:#111; }
+    video,canvas { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .badge { position:absolute; top:10px; left:10px; background:rgba(0,0,0,.5); padding:4px 8px; border-radius:6px; font-size:12px; }
+  </style>
+</head>
+<body>
+  <h3 style="text-align:center">Zero‑shot Object Detection (OWL‑ViT)</h3>
+  <div class="wrap">
+    <video id="video" autoplay playsinline muted></video>
+    <canvas id="canvas"></canvas>
+    <div class="badge" id="fps">— FPS</div>
+  </div>
+  <p style="text-align:center">
+    Метки: <input id="labels" value="person, dog, cat, bottle, laptop, phone" size="60">
+    <button id="apply">Применить</button>
+  </p>
+  <div id="err" style="color:#ff6b6b;text-align:center"></div>
+
+  <!-- Подключаем библиотеку ДО основного скрипта -->
+  <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers/dist/transformers.min.js"></script>
+  <script>
+    const video=document.getElementById('video');
+    const canvas=document.getElementById('canvas');
+    const ctx=canvas.getContext('2d');
+    const fpsBadge=document.getElementById('fps');
+    const errBox=document.getElementById('err');
+    const labelsInput=document.getElementById('labels');
+    const applyBtn=document.getElementById('apply');
+
+    let detector=null, labels=[], running=true, lastTS=performance.now(), fps=0;
+
+    function setError(msg){errBox.textContent=msg||'';}
+    function updateFPS(){const now=performance.now();const dt=now-lastTS;lastTS=now;fps=fps*0.9+(1000/dt)*0.1;fpsBadge.textContent=fps.toFixed(1)+' FPS';}
+    function resizeCanvas(){canvas.width=video.videoWidth||640;canvas.height=video.videoHeight||480;}
+    async function setupCamera(){
+      const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+      video.srcObject=stream;await video.play();resizeCanvas();
+    }
+    function drawBox(x,y,w,h,label,score){
+      ctx.lineWidth=2;ctx.strokeStyle='#00e0a4';ctx.strokeRect(x,y,w,h);
+      const text=`${label} ${(score*100).toFixed(0)}%`;
+      ctx.font="14px sans-serif";const m=ctx.measureText(text);
+      ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(x,Math.max(0,y-18),m.width+8,18);
+      ctx.fillStyle='#fff';ctx.fillText(text,x+4,y-4);
+    }
+    function getLabels(){return labelsInput.value.split(',').map(s=>s.trim()).filter(Boolean);}
+
+    async function loadDetector(){
+      const pipeline=window.transformers.pipeline; // теперь точно есть
+      detector=await pipeline('zero-shot-object-detection','Xenova/owlvit-base-patch32');
+    }
+
+    async function detectOnce(){
+      if(!detector||video.readyState<2) return [];
+      const off=document.createElement('canvas');off.width=video.videoWidth;off.height=video.videoHeight;
+      off.getContext('2d').drawImage(video,0,0,off.width,off.height);
+      return await detector(off,{candidate_labels:labels,threshold:0.3});
+    }
+
+    async function loop(){
+      if(running){
+        if(canvas.width!==video.videoWidth) resizeCanvas();
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        try{
+          const preds=await detectOnce();
+          for(const p of preds){
+            const x=p.box.xmin,y=p.box.ymin,w=p.box.xmax-p.box.xmin,h=p.box.ymax-p.box.ymin;
+            drawBox(x,y,w,h,p.label,p.score);
+          }
+        }catch(e){setError(e.message);}
+      }
+      updateFPS();requestAnimationFrame(loop);
+    }
+
+    async function init(){
+      try{await setupCamera();}catch(e){setError("Камера: "+e.message);return;}
+      labels=getLabels();
+      try{await loadDetector();}catch(e){setError("Модель: "+e.message);return;}
+      loop();
+    }
+
+    applyBtn.addEventListener('click',()=>{labels=getLabels();});
+    if(!navigator.mediaDevices) setError("Нет доступа к камере"); else init();
+  </script>
+</body>
+</html>
